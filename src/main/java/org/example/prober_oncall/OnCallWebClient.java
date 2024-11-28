@@ -13,7 +13,7 @@ public class OnCallWebClient {
 
     public String login() {
         return webClient.get()
-                .uri("/api/v0/users/jdoe")
+                .uri("/api/v0/users/gordeq")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
