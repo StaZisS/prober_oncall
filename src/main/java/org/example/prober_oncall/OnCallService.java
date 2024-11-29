@@ -11,10 +11,16 @@ public class OnCallService {
     private static final Logger LOG = LoggerFactory.getLogger(OnCallService.class);
     private final OnCallWebClient onCallWebClient;
     private final OnCallMetricsService onCallMetricsService;
+    private final OncallRepository oncallRepository;
 
-    public OnCallService(OnCallWebClient onCallWebClient, OnCallMetricsService onCallMetricsService) {
+    public OnCallService(
+            OnCallWebClient onCallWebClient,
+            OnCallMetricsService onCallMetricsService,
+            OncallRepository oncallRepository
+    ) {
         this.onCallWebClient = onCallWebClient;
         this.onCallMetricsService = onCallMetricsService;
+        this.oncallRepository = oncallRepository;
     }
 
     @Scheduled(fixedRate = 2000)
@@ -23,6 +29,7 @@ public class OnCallService {
         try {
             var response = onCallWebClient.login();
             onCallMetricsService.incrementSuccessCount();
+            oncallRepository.isAppAlive();
             LOG.info("nice: {}", response);
         } catch (Exception e) {
             onCallMetricsService.incrementFailCount();
